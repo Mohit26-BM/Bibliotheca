@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+  <title>Bibliotheca — My Profile</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/profile.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="app-page">
+  <nav>
+    <div class="nav-brand"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> <span>Bibliotheca</span></div>
+    <div class="nav-links">
+      <a href="dashboard.html">Browse</a>
+      <a href="profile.html" style="color:var(--gold)">My Profile</a>
+      <a href="feedback.html">Feedback</a>
+      <button class="nav-btn" onclick="signOut()">Sign Out</button>
+      <span class="nav-user" id="navUser"></span>
+    </div>
+  </nav>
+
+  <div class="page-wrap fade-in">
+    <div class="profile-layout">
+
+      <!-- Left: Avatar + quick stats -->
+      <div class="profile-sidebar reveal">
+        <div class="avatar-wrap">
+          <div class="avatar-ring">
+            <div class="avatar-circle" id="avatarDisplay">?</div>
+          </div>
+          <div class="avatar-hint">Avatar is your first initial</div>
+        </div>
+
+        <div class="profile-name" id="sidebarName">—</div>
+        <div class="profile-email" id="sidebarEmail">—</div>
+        <span class="book-badge badge-available" id="sidebarRole" style="margin-top:.5rem">user</span>
+
+        <hr class="profile-divider" />
+
+        <div class="profile-stats">
+          <div class="p-stat">
+            <div class="p-stat-num" id="statLoans">—</div>
+            <div class="p-stat-label">Total Loans</div>
+          </div>
+          <div class="p-stat">
+            <div class="p-stat-num" id="statActive">—</div>
+            <div class="p-stat-label">Active</div>
+          </div>
+          <div class="p-stat">
+            <div class="p-stat-num" id="statReviews">—</div>
+            <div class="p-stat-label">Reviews</div>
+          </div>
+        </div>
+
+        <div class="member-since" id="memberSince"></div>
+      </div>
+
+      <!-- Right: Edit form -->
+      <div class="profile-main">
+        <div class="profile-card reveal">
+          <h2 class="profile-section-title">Personal Information</h2>
+          <p class="profile-section-sub">This information is only visible to you and library admins.</p>
+
+          <div class="profile-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="pName" placeholder="Your full name" />
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="pPhone" placeholder="+91 98765 43210" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="pEmail" placeholder="your.email@example.com" disabled style="opacity:.5;cursor:not-allowed" />
+              <span class="field-note">Email cannot be changed here.</span>
+            </div>
+
+            <div class="form-group">
+              <label>Address</label>
+              <textarea id="pAddress" rows="2" placeholder="House no, Street, City, State — PIN"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>City</label>
+                <input type="text" id="pCity" placeholder="Mumbai" />
+              </div>
+              <div class="form-group">
+                <label>PIN Code</label>
+                <input type="text" id="pPin" placeholder="400001" maxlength="6" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Bio <span style="color:var(--muted);font-weight:300">(optional)</span></label>
+              <textarea id="pBio" rows="3" placeholder="A little about yourself — favourite genres, reading goals…"></textarea>
+            </div>
+
+            <div id="profileMsg"></div>
+
+            <button class="btn btn-gold" onclick="saveProfile()" id="saveBtn">
+              Save Changes
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-card reveal" style="margin-top:1.5rem">
+          <h2 class="profile-section-title">Reading Activity</h2>
+          <div id="recentLoans"><div class="spinner" style="margin:2rem auto;width:28px;height:28px;border-width:2px"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

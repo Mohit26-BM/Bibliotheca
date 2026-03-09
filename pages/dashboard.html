@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+  <title>Bibliotheca — Browse</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="app-page">
+  <nav>
+    <div class="nav-brand"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> <span>Bibliotheca</span></div>
+    <div class="nav-links">
+      <a href="dashboard.html">Browse</a>
+      <a href="#" onclick="openMyLoans()">My Loans</a>
+      <a href="profile.html">My Profile</a>
+      <a href="feedback.html">Feedback</a>
+      <button class="nav-btn" onclick="signOut()">Sign Out</button>
+      <span class="nav-user" id="navUser"></span>
+    </div>
+  </nav>
+
+  <div class="page-wrap fade-in">
+    <div class="hero-greeting reveal">
+      <h1 id="greeting">Welcome back</h1>
+      <p>Explore our collection of <strong id="totalCount" style="color:var(--gold)">—</strong> books</p>
+    </div>
+
+    <!-- Genre Bubble Explorer -->
+    <div class="bubble-section reveal" id="bubbleSection">
+      <div class="bubble-head">
+        <span class="bubble-title">Explore by Genre</span>
+        <button class="bubble-clear" id="bubbleClear" onclick="clearBubble()" style="display:none">✕ Clear filter</button>
+      </div>
+      <div class="bubble-container" id="bubbleContainer">
+        <div class="spinner" style="margin:1rem auto;width:24px;height:24px;border-width:2px"></div>
+      </div>
+    </div>
+
+    <div class="filters reveal">
+      <div class="form-group" style="flex:2; min-width:220px;">
+        <label>Search</label>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Title, author, category…" oninput="onSearch()" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="filterCat" title="Category" onchange="loadBooks()">
+          <option value="">All categories</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Availability</label>
+        <select id="filterAvail" title="Availability" onchange="loadBooks()">
+          <option value="">All</option>
+          <option value="true">Available</option>
+          <option value="false">On Loan</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Sort by</label>
+        <select id="sortBy" title="Sort by" onchange="loadBooks()">
+          <option value="title">Title</option>
+          <option value="published_year">Year</option>
+          <option value="average_rating">Rating</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="bookGrid" class="book-grid"></div>
+    <div id="loading" class="spinner"></div>
+    <div class="pagination reveal" id="pagination"></div>
+  </div>
+
+  <!-- My Loans Modal -->
+  <div class="modal-overlay" id="loansModal">
+    <div class="modal" style="max-width:680px">
+      <div class="modal-header">
+        <h3 style="font-size:1.6rem">My Borrowed Books</h3>
+        <button class="modal-close" onclick="closeLoansModal()">✕</button>
+      </div>
+      <div id="loansBody"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-name"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> Bibliotheca</div>
+        <p>A curated library management system. Discover, borrow, and explore thousands of titles across every genre.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Browse</h4>
+        <ul>
+          <li><a href="dashboard.html">All Books</a></li>
+          <li><a href="dashboard.html">Fiction</a></li>
+          <li><a href="dashboard.html">History</a></li>
+          <li><a href="dashboard.html">Science</a></li>
+          <li><a href="dashboard.html">Philosophy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul>
+          <li><button onclick="openMyLoans()">My Loans</button></li>
+          <li><a href="profile.html">My Profile</a></li>
+          <li><a href="feedback.html">Feedback</a></li>
+          <li><button onclick="signOut()">Sign Out</button></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Library</h4>
+        <ul>
+          <li><a href="#">Loan Policy</a></li>
+          <li><a href="#">Late Fees</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Bibliotheca. Built with <span>♥</span> for readers.</div>
+      <div class="footer-badge">6,000+ Books Available</div>
+    </div>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

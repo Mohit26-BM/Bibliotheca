@@ -1,0 +1,76 @@
+.filters {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem; align-items: flex-end;
+}
+.filters .form-group { margin-bottom: 0; flex: 1; min-width: 160px; }
+.filters select { padding: .6rem .9rem; }
+
+.hero-greeting {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.hero-greeting p { color: var(--muted); margin-top: .3rem; }
+
+.my-loans-btn {
+  display: flex; align-items: center; gap: .4rem;
+  color: var(--gold); font-size: .85rem;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+
+/* ── Genre Bubble Explorer ── */
+.bubble-section {
+  margin-bottom: 2rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+}
+.bubble-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.bubble-title {
+  font-size: .72rem; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--muted);
+}
+.bubble-clear {
+  background: none; border: none; cursor: pointer;
+  font-size: .75rem; color: var(--gold-dim);
+  font-family: 'DM Sans', sans-serif;
+  transition: color .2s; padding: 0;
+}
+.bubble-clear:hover { color: var(--gold); }
+.bubble-container {
+  display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+}
+.bubble {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .35rem .9rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: .8rem;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.bubble:hover {
+  border-color: var(--gold-dim);
+  color: var(--cream);
+  transform: translateY(-1px);
+}
+.bubble.active {
+  background: rgba(201,168,76,.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.bubble-count {
+  font-size: .68rem;
+  opacity: .6;
+}

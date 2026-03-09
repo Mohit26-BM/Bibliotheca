@@ -1,0 +1,25 @@
+# Environment variables - keep keys out of version control
+.env
+.env.local
+.env.*.local
+
+# Node modules (for Netlify Functions)
+node_modules/
+netlify/functions/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+
+# Netlify specific
+.netlify/

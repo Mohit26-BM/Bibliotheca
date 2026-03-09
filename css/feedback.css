@@ -1,0 +1,40 @@
+.feedback-head {
+  margin-bottom: 1.4rem;
+}
+
+.feedback-head p {
+  color: var(--muted);
+  margin-top: .25rem;
+}
+
+.feedback-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  box-shadow: var(--shadow);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.feedback-msg {
+  min-height: 1.2rem;
+  margin: .4rem 0 1rem;
+}
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

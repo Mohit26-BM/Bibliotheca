@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+  <title>Bibliotheca — Book</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/book.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="app-page">
+  <nav>
+    <div class="nav-brand"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> <span>Bibliotheca</span></div>
+    <div class="nav-links">
+      <a href="dashboard.html">Browse</a>
+      <a href="#" onclick="openMyLoans()">My Loans</a>
+      <a href="profile.html">My Profile</a>
+      <a href="feedback.html">Feedback</a>
+      <button class="nav-btn" onclick="signOut()">Sign Out</button>
+      <span class="nav-user" id="navUser"></span>
+    </div>
+  </nav>
+
+  <div class="page-wrap fade-in" style="max-width:960px">
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="spinner" id="spinner"></div>
+    <div id="bookContent" style="display:none"></div>
+  </div>
+
+  <!-- My Loans Modal -->
+  <div class="modal-overlay" id="loansModal">
+    <div class="modal" style="max-width:680px">
+      <div class="modal-header">
+        <h3 style="font-size:1.6rem">My Borrowed Books</h3>
+        <button class="modal-close" onclick="document.getElementById('loansModal').classList.remove('open')">✕</button>
+      </div>
+      <div id="loansBody"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-name"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> Bibliotheca</div>
+        <p>A curated library management system. Discover, borrow, and explore thousands of titles across every genre.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Browse</h4>
+        <ul>
+          <li><a href="dashboard.html">All Books</a></li>
+          <li><a href="dashboard.html">Fiction</a></li>
+          <li><a href="dashboard.html">History</a></li>
+          <li><a href="dashboard.html">Science</a></li>
+          <li><a href="dashboard.html">Philosophy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul>
+          <li><button onclick="openMyLoans()">My Loans</button></li>
+          <li><a href="feedback.html">Feedback</a></li>
+          <li><button onclick="signOut()">Sign Out</button></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Library</h4>
+        <ul>
+          <li><a href="#">Loan Policy</a></li>
+          <li><a href="#">Late Fees</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Bibliotheca. Built with <span>♥</span> for readers.</div>
+      <div class="footer-badge">6,000+ Books Available</div>
+    </div>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/book.js"></script>
+</body>
+</html>

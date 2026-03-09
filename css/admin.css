@@ -1,0 +1,28 @@
+.admin-tabs {
+  display: flex; gap: .5rem; margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border); padding-bottom: 0;
+}
+.admin-tab {
+  padding: .65rem 1.2rem; background: none; border: none;
+  color: var(--muted); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: .85rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: all .2s;
+}
+.admin-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.book-row-thumb {
+  width: 36px; height: 50px; object-fit: cover;
+  border-radius: 3px; background: var(--bg3);
+}
+.search-bar-admin { margin-bottom: 1.2rem; }
+
+.overdue-tag {
+  background: rgba(192,57,43,.15); color: #e05747;
+  border: 1px solid rgba(192,57,43,.3);
+  font-size: .7rem; padding: .1rem .45rem; border-radius: 20px;
+}

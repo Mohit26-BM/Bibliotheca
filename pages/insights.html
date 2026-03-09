@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+  <title>Bibliotheca — Insights</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link rel="stylesheet" href="../css/insights.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="app-page">
+  <nav>
+    <div class="nav-brand"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> <span>Bibliotheca</span> <span style="color:var(--gold-dim);font-size:.9rem">Insights</span></div>
+    <div class="nav-links">
+      <a href="admin.html">Admin</a>
+      <a href="dashboard.html">Browse</a>
+      <button class="nav-btn" onclick="signOut()">Sign Out</button>
+      <span class="nav-user" id="navUser"></span>
+    </div>
+  </nav>
+
+  <div class="page-wrap fade-in">
+
+    <div class="section-head" style="margin-bottom:2rem">
+      <div>
+        <h2>Library Insights</h2>
+        <p style="color:var(--muted);font-size:.88rem;margin-top:.3rem">Live data from your collection</p>
+      </div>
+      <span id="lastUpdated" style="font-size:.75rem;color:var(--muted)"></span>
+    </div>
+
+    <!-- ── Top stat row ── -->
+    <div class="stats-row reveal-group" style="margin-bottom:2.5rem">
+      <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total Books</div></div>
+      <div class="stat-card"><div class="stat-num" id="statAvail">—</div><div class="stat-label">Available</div></div>
+      <div class="stat-card"><div class="stat-num" id="statLoaned">—</div><div class="stat-label">On Loan</div></div>
+      <div class="stat-card"><div class="stat-num" id="statUsers">—</div><div class="stat-label">Members</div></div>
+      <div class="stat-card"><div class="stat-num" id="statOverdue">—</div><div class="stat-label">Overdue</div></div>
+    </div>
+
+    <!-- ── Row 1: Donut + Heatmap ── -->
+    <div class="insights-row reveal" style="margin-bottom:2rem">
+
+      <!-- Availability Donut -->
+      <div class="insight-card" style="flex:0 0 300px">
+        <div class="insight-card-head">
+          <h3>Availability</h3>
+          <span class="insight-badge" id="availPct">—</span>
+        </div>
+        <div class="donut-wrap">
+          <canvas id="donutChart"></canvas>
+          <div class="donut-centre">
+            <div class="donut-num" id="donutNum">—</div>
+            <div class="donut-sub">available</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <span class="legend-dot" style="background:#4dbb78"></span> Available
+          <span class="legend-dot" style="background:var(--gold);margin-left:1rem"></span> On Loan
+        </div>
+      </div>
+
+      <!-- Borrow Activity Heatmap -->
+      <div class="insight-card" style="flex:1">
+        <div class="insight-card-head">
+          <h3>Borrow Activity</h3>
+          <span style="font-size:.75rem;color:var(--muted)">Last 12 weeks</span>
+        </div>
+        <div class="heatmap-wrap" id="heatmapWrap">
+          <div class="spinner" id="heatmapSpinner"></div>
+        </div>
+        <div class="heatmap-legend">
+          <span style="font-size:.72rem;color:var(--muted)">Less</span>
+          <div class="heatmap-legend-cells">
+            <div class="hm-cell" style="background:var(--bg3)"></div>
+            <div class="hm-cell" style="background:rgba(201,168,76,.2)"></div>
+            <div class="hm-cell" style="background:rgba(201,168,76,.4)"></div>
+            <div class="hm-cell" style="background:rgba(201,168,76,.65)"></div>
+            <div class="hm-cell" style="background:var(--gold)"></div>
+          </div>
+          <span style="font-size:.72rem;color:var(--muted)">More</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Row 2: Top Borrowed Leaderboard + Genre breakdown ── -->
+    <div class="insights-row reveal" style="margin-bottom:2rem">
+
+      <!-- Top Borrowed Leaderboard -->
+      <div class="insight-card" style="flex:1">
+        <div class="insight-card-head">
+          <h3>Most Borrowed Books</h3>
+          <span style="font-size:.75rem;color:var(--muted)">All time</span>
+        </div>
+        <div id="leaderboard">
+          <div class="spinner" id="leaderSpinner"></div>
+        </div>
+      </div>
+
+      <!-- Genre Breakdown Bar Chart -->
+      <div class="insight-card" style="flex:1">
+        <div class="insight-card-head">
+          <h3>Collection by Genre</h3>
+          <span style="font-size:.75rem;color:var(--muted)">Book count</span>
+        </div>
+        <div style="position:relative;height:280px">
+          <canvas id="genreChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Row 3: Loans over time line chart ── -->
+    <div class="insight-card reveal" style="margin-bottom:2rem">
+      <div class="insight-card-head">
+        <h3>Borrowing Trend</h3>
+        <span style="font-size:.75rem;color:var(--muted)">Loans per month</span>
+      </div>
+      <div style="position:relative;height:220px">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/insights.js"></script>
+</body>
+</html>

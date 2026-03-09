@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+  <title>Bibliotheca — Admin</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="app-page">
+  <nav>
+    <div class="nav-brand"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> <span>Bibliotheca</span> <span style="color:var(--gold-dim);font-size:.9rem">Admin</span></div>
+    <div class="nav-links">
+      <a href="insights.html" style="color:var(--gold)">Insights</a>
+      <a href="dashboard.html">Browse</a>
+      <button class="nav-btn" onclick="signOut()">Sign Out</button>
+      <span class="nav-user" id="navUser"></span>
+    </div>
+  </nav>
+
+  <div class="page-wrap fade-in">
+    <div class="section-head reveal" style="margin-bottom:1.5rem">
+      <h2>Library Administration</h2>
+      <button class="btn btn-gold btn-sm" onclick="openAddBook()">+ Add Book</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row reveal-group">
+      <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total Books</div></div>
+      <div class="stat-card"><div class="stat-num" id="statAvail">—</div><div class="stat-label">Available</div></div>
+      <div class="stat-card"><div class="stat-num" id="statLoaned">—</div><div class="stat-label">On Loan</div></div>
+      <div class="stat-card"><div class="stat-num" id="statUsers">—</div><div class="stat-label">Registered Users</div></div>
+      <div class="stat-card"><div class="stat-num" id="statOverdue">—</div><div class="stat-label">Overdue</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('books')">Books</button>
+      <button class="admin-tab" onclick="switchTab('loans')">Active Loans</button>
+      <button class="admin-tab" onclick="switchTab('overdue')">Overdue</button>
+      <button class="admin-tab" onclick="switchTab('users')">Users</button>
+      <button class="admin-tab" onclick="switchTab('reviews')">Reviews</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-books">
+      <div class="search-bar-admin">
+        <div class="search-wrap" style="max-width:400px">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="bookSearch" placeholder="Search books…" oninput="searchBooks()" />
+        </div>
+      </div>
+      <div id="booksTableWrap"></div>
+      <div class="spinner" id="booksSpinner"></div>
+      <div class="pagination" id="booksPagination"></div>
+    </div>
+
+    <div class="tab-panel" id="tab-loans">
+      <div id="loansTableWrap"></div>
+      <div class="spinner" id="loansSpinner" style="display:none"></div>
+    </div>
+
+    <div class="tab-panel" id="tab-overdue">
+      <div id="overdueTableWrap"></div>
+      <div class="spinner" id="overdueSpinner" style="display:none"></div>
+    </div>
+
+    <div class="tab-panel" id="tab-users">
+      <div id="usersTableWrap"></div>
+      <div class="spinner" id="usersSpinner" style="display:none"></div>
+    </div>
+
+    <div class="tab-panel" id="tab-reviews">
+      <div id="reviewsTableWrap"></div>
+      <div class="spinner" id="reviewsSpinner" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Book Modal -->
+  <div class="modal-overlay" id="bookFormModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="bookFormTitle" style="font-size:1.6rem">Add Book</h3>
+        <button class="modal-close" onclick="closeBookForm()">✕</button>
+      </div>
+      <div id="bookFormMsg"></div>
+      <div class="form-group"><label>Title *</label><input id="fTitle" placeholder="Book title" /></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group"><label>Authors</label><input id="fAuthors" placeholder="Author names" /></div>
+        <div class="form-group"><label>Published Year</label><input id="fYear" type="number" placeholder="2024" /></div>
+      </div>
+      <div class="form-group"><label>Categories</label><input id="fCats" placeholder="Fiction, Drama…" /></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group"><label>ISBN-13</label><input id="fIsbn13" placeholder="9780…" /></div>
+        <div class="form-group"><label>ISBN-10</label><input id="fIsbn10" placeholder="0…" /></div>
+      </div>
+      <div class="form-group"><label>Thumbnail URL</label><input id="fThumb" placeholder="https://…" /></div>
+      <div class="form-group"><label>Num Pages</label><input id="fPages" type="number" placeholder="250" /></div>
+      <div class="form-group"><label>Description</label><textarea id="fDesc" rows="3" placeholder="About the book…"></textarea></div>
+      <div style="display:flex;gap:.8rem;justify-content:flex-end;margin-top:.5rem">
+        <button class="btn btn-outline" onclick="closeBookForm()">Cancel</button>
+        <button class="btn btn-gold" id="bookFormSubmitBtn" onclick="submitBookForm()">Save Book</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-name"><img src="../favicon.ico" alt="Bibliotheca logo" class="nav-logo-icon" /> Bibliotheca</div>
+        <p>A curated library management system. Discover, borrow, and explore thousands of titles across every genre.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Browse</h4>
+        <ul>
+          <li><a href="dashboard.html">All Books</a></li>
+          <li><a href="dashboard.html">Fiction</a></li>
+          <li><a href="dashboard.html">History</a></li>
+          <li><a href="dashboard.html">Science</a></li>
+          <li><a href="dashboard.html">Philosophy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul>
+          <li><button href="dashboard.html">Browse Books</button></li>
+          <li><button onclick="signOut()">Sign Out</button></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Library</h4>
+        <ul>
+          <li><a href="#">Loan Policy</a></li>
+          <li><a href="#">Late Fees</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Bibliotheca. Built with <span>♥</span> for readers.</div>
+      <div class="footer-badge">6,000+ Books Available</div>
+    </div>
+  </footer>
+
+  <div id="toast"></div>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>
