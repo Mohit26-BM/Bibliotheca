@@ -2,7 +2,7 @@
 
 A full-stack library management system built with **Vanilla HTML/CSS/JS** and **Supabase**. No frameworks. No build tools.
 
-**Live Demo:** [the-bibliotheca.netlify.app](https://the-bibliotheca.netlify.app)
+**Live Demo:** [Click here!](https://the-bibliotheca.netlify.app)
 
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-c9a84c?style=flat-square)
 ![Backend](https://img.shields.io/badge/Backend-Supabase-3ecf8e?style=flat-square)
