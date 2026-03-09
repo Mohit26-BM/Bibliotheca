@@ -1,16 +1,12 @@
 # Bibliotheca — Library Management System
 
 A full-stack library management system built with **Vanilla HTML/CSS/JS** and **Supabase**. No frameworks. No build tools.
+[Visit Here](https://the-bibliotheca.netlify.app/index.html)
 
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-c9a84c?style=flat-square)
 ![Backend](https://img.shields.io/badge/Backend-Supabase-3ecf8e?style=flat-square)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat-square)
 ![Theme](https://img.shields.io/badge/Theme-Dark%20Library-1c1813?style=flat-square)
-
----
-[Visit Here](https://the-bibliotheca.netlify.app/index.html)
-
----
 
 ## Tech Stack
 
