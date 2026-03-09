@@ -1,7 +1,4 @@
-// ============================================================
-// Web3Forms Access Key is now in Netlify environment variables
-// All feedback submissions go through /.netlify/functions/feedback-proxy
-// ============================================================
+const WEB3FORMS_ACCESS_KEY = "e98bec84-ca81-408e-99cb-aa6c6d3e3210";
 
 let currentUser = null;
 
@@ -44,11 +41,17 @@ async function submitFeedback(e) {
     return;
   }
 
+  if (WEB3FORMS_ACCESS_KEY === "YOUR_WEB3FORMS_ACCESS_KEY") {
+    msgEl.innerHTML = '<div class="alert alert-error">Set your Web3Forms key in <code>js/feedback.js</code> before sending feedback.</div>';
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = "Sending...";
   msgEl.innerHTML = "";
 
   const payload = {
+    access_key: WEB3FORMS_ACCESS_KEY,
     subject: `Bibliotheca Feedback: ${type}`,
     from_name: "Bibliotheca Feedback Page",
     name: document.getElementById("fbName").value.trim(),
@@ -58,20 +61,16 @@ async function submitFeedback(e) {
   };
 
   try {
-    // Call feedback proxy instead of Web3Forms directly
-    const response = await fetch("/.netlify/functions/feedback-proxy", {
+    const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${(await sb.auth.getSession()).data.session?.access_token}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      throw new Error(result.error || result.message || "Failed to send feedback.");
+      throw new Error(result.message || "Failed to send feedback.");
     }
 
     document.getElementById("fbMessage").value = "";

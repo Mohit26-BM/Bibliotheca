@@ -155,38 +155,27 @@ npx serve .
 
 ## Supabase Setup
 
-**1. Initialize Supabase Project**
-- Go to [supabase.com](https://supabase.com) and create a new project
-- Copy your Project URL and Anon Key
+**1. Add credentials to `js/supabase.js`:**
 
-**2. Add credentials (for local development only):**
-
-Edit `js/supabase.js`:
 ```javascript
 const SUPABASE_URL      = "https://YOUR_PROJECT_ID.supabase.co";
 const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
 ```
 
-> **Note:** The anon key is safe to expose in frontend code because Supabase Row-Level Security (RLS) prevents unauthorized data access. When deploying to Netlify, move this key to environment variables (see Deployment section).
+Found at: Supabase → Project Settings → API.
 
-3. Run `supabase_setup.sql` in the Supabase SQL Editor:
-- Supabase Dashboard → SQL Editor → New Query
-- Copy & paste contents of `supabase_setup.sql`
-- Click Run
+**2. Run `supabase_setup.sql`** in the Supabase SQL Editor.
 
-4. Enable Email Auth:
-   - Supabase Dashboard → **Authentication** → **Providers** → **Email**
-   - Enable the provider
-   - Turn off "Confirm Email" (optional, for easier testing)
+**3. Enable Email Auth:**
+Supabase → Authentication → Providers → Email → Enable, turn off Confirm Email.
 
-5. Promote yourself to admin:
+**4. Promote yourself to admin:**
 
-Run in Supabase SQL Editor:
 ```sql
 update public.users set role = 'admin' where email = 'your@email.com';
 ```
 
-Sign out and back in — you'll now have admin access.
+Sign out and back in.
 
 ---
 
@@ -204,52 +193,15 @@ Feedback form access is guarded in frontend logic to logged-in users with `role 
 
 ## Deployment
 
-### Local Development
-
 ```bash
-# Python
-python3 -m http.server 3000
+# Netlify CLI
+netlify deploy --dir . --prod
 
-# Node
-npx serve .
-
-# VS Code — Live Server extension → right click index.html → Open with Live Server
+# Or drag the folder to https://app.netlify.com/drop
 ```
 
-### Deploy to Netlify
-
-1. Go to [https://app.netlify.com/drop](https://app.netlify.com/drop)
-2. Drag your project folder onto the screen
-3. Wait for build to complete
-
-**Option 2: Netlify CLI**
-
-```bash
-npm install -g netlify-cli
-netlify deploy --prod
-```
-
-### Set Environment Variables on Netlify
-
-After deploying, add your keys to Netlify so the serverless functions can access them:
-
-1. Go to **Netlify Dashboard** → Your Site → **Site Settings** → **Build & Deploy** → **Environment**
-2. Add these environment variables:
-   - `SUPABASE_URL` = Your Supabase project URL
-   - `SUPABASE_ANON_KEY` = Your Supabase anon key
-   - `WEB3FORMS_ACCESS_KEY` = Your Web3Forms access key
-
-3. **Trigger a redeploy** (Settings → Build & Deploy → Deploys → Trigger deploy)
-
-### Supabase Auth Redirect URL
-
-After your live URL is generated, add it to Supabase:
-
-Supabase Dashboard → **Authentication** → **URL Configuration** → **Redirect URLs**
-
-Add:
-- `https://your-netlify-domain.netlify.app`
-- `https://your-netlify-domain.netlify.app/pages/dashboard.html`
+After deploying, add your live URL to:
+Supabase → Authentication → URL Configuration → Redirect URLs.
 
 ---
 
