@@ -2,12 +2,14 @@
 
 A full-stack library management system built with **Vanilla HTML/CSS/JS** and **Supabase**. No frameworks. No build tools.
 
-[Visit Here](https://the-bibliotheca.netlify.app/index.html)
+**Live Demo:** [the-bibliotheca.netlify.app](https://the-bibliotheca.netlify.app)
 
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-c9a84c?style=flat-square)
 ![Backend](https://img.shields.io/badge/Backend-Supabase-3ecf8e?style=flat-square)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat-square)
 ![Theme](https://img.shields.io/badge/Theme-Dark%20Library-1c1813?style=flat-square)
+
+---
 
 ## Tech Stack
 
@@ -18,6 +20,7 @@ A full-stack library management system built with **Vanilla HTML/CSS/JS** and **
 | Database | PostgreSQL                      |
 | Auth     | Supabase Auth (JWT)             |
 | Charts   | Chart.js                        |
+| Hosting  | Netlify                         |
 
 ---
 
@@ -55,7 +58,7 @@ library-app/
 │   ├── insights.js
 │   └── feedback.js
 └── images/
-    ├── 1.jpg — 6.jpg
+    └── 1.jpg — 6.jpg
 ```
 
 ---
@@ -76,9 +79,26 @@ reviews  — id, book_id, user_id, rating (1–5), review_text
 
 ---
 
-## Dataset
+## Setup
 
-Book data imported from Kaggle. Load via Supabase → Table Editor → Import CSV.
+**1. Add credentials to `js/supabase.js`:**
+```javascript
+const SUPABASE_URL      = "https://YOUR_PROJECT_ID.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
+```
+
+**2. Run `supabase_setup.sql`** in Supabase SQL Editor.
+
+**3. Enable Email Auth:**
+Supabase → Authentication → Providers → Email → Enable, turn off Confirm Email.
+
+**4. Promote yourself to admin:**
+```sql
+update public.users set role = 'admin' where email = 'your@email.com';
+```
+
+**5. Import book data:**
+Dataset sourced from Kaggle. Load via Supabase → Table Editor → Import CSV.
 
 ---
 
