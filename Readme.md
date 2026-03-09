@@ -9,29 +9,15 @@ A full-stack library management system built with **Vanilla HTML/CSS/JS** and **
 
 ---
 
-## Recent Updates (Short)
-
-- Added auth-page background slideshow (`images/1.jpg` to `images/6.jpg`).
-- Added user-only feedback page using Web3Forms:
-  - `pages/feedback.html`
-  - `css/feedback.css`
-  - `js/feedback.js`
-- Replaced book emoji logos with favicon icons on internal pages.
-- Added subtle static background style for internal pages via `body.app-page`.
-- Cleaned up removed decorative auth elements (floating books / shelf symbol).
-
----
-
 ## Tech Stack
 
-| Layer     | Technology                      |
-| --------- | ------------------------------- |
-| Frontend  | HTML5, CSS3, Vanilla JavaScript |
-| Backend   | Supabase (BaaS)                 |
-| Database  | PostgreSQL                      |
-| Auth      | Supabase Auth (JWT)             |
-| Charts    | Chart.js                        |
-| Hosting   | Netlify / Vercel / GitHub Pages |
+| Layer    | Technology                      |
+| -------- | ------------------------------- |
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| Backend  | Supabase (BaaS)                 |
+| Database | PostgreSQL                      |
+| Auth     | Supabase Auth (JWT)             |
+| Charts   | Chart.js                        |
 
 ---
 
@@ -41,6 +27,7 @@ A full-stack library management system built with **Vanilla HTML/CSS/JS** and **
 library-app/
 ├── index.html
 ├── favicon.ico
+├── supabase_setup.sql
 ├── pages/
 │   ├── dashboard.html
 │   ├── admin.html
@@ -67,14 +54,8 @@ library-app/
 │   ├── profile.js
 │   ├── insights.js
 │   └── feedback.js
-├── images/
-│   ├── 1.jpg
-│   ├── 2.jpg
-│   ├── 3.jpg
-│   ├── 4.jpg
-│   ├── 5.jpg
-│   └── 6.jpg
-└── supabase_setup.sql
+└── images/
+    ├── 1.jpg — 6.jpg
 ```
 
 ---
@@ -82,126 +63,22 @@ library-app/
 ## Database Schema
 
 ```sql
-books
-  id             serial primary key
-  isbn13         text
-  isbn10         text
-  title          text
-  authors        text
-  categories     text
-  thumbnail      text
-  description    text
-  published_year int
-  average_rating float
-  num_pages      int
-  ratings_count  int
-  is_available   boolean default true
-  created_at     timestamptz default now()
+books    — id, title, authors, categories, thumbnail, description,
+           published_year, average_rating, num_pages, ratings_count, is_available
 
-users
-  id         uuid references auth.users primary key
-  name       text
-  email      text
-  role       text default 'user'
-  phone      text
-  address    text
-  city       text
-  pin        text
-  bio        text
-  is_deleted boolean default false
-  created_at timestamptz default now()
+users    — id, name, email, role, phone, address, city, pin, bio, is_deleted
 
-loans
-  id          serial primary key
-  book_id     int references books
-  user_id     uuid references users
-  borrowed_at timestamptz default now()
-  due_date    timestamptz
-  returned_at timestamptz
-  fine_amount int default 0
-  is_returned boolean default false
+loans    — id, book_id, user_id, borrowed_at, due_date, returned_at,
+           fine_amount, is_returned
 
-reviews
-  id          serial primary key
-  book_id     int references books
-  user_id     uuid references users
-  rating      int check (rating between 1 and 5)
-  review_text text
-  created_at  timestamptz default now()
+reviews  — id, book_id, user_id, rating (1–5), review_text
 ```
 
 ---
 
-## Installation
+## Dataset
 
-```bash
-git clone https://github.com/yourusername/bibliotheca.git
-cd bibliotheca
-```
-
-Run locally using any of these:
-
-```bash
-# Python
-python3 -m http.server 3000
-
-# Node
-npx serve .
-
-# VS Code — Live Server extension → right click index.html → Open with Live Server
-```
-
----
-
-## Supabase Setup
-
-**1. Add credentials to `js/supabase.js`:**
-
-```javascript
-const SUPABASE_URL      = "https://YOUR_PROJECT_ID.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
-```
-
-Found at: Supabase → Project Settings → API.
-
-**2. Run `supabase_setup.sql`** in the Supabase SQL Editor.
-
-**3. Enable Email Auth:**
-Supabase → Authentication → Providers → Email → Enable, turn off Confirm Email.
-
-**4. Promote yourself to admin:**
-
-```sql
-update public.users set role = 'admin' where email = 'your@email.com';
-```
-
-Sign out and back in.
-
----
-
-## Feedback (Web3Forms)
-
-Set your Web3Forms key in `js/feedback.js`:
-
-```javascript
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
-```
-
-Feedback form access is guarded in frontend logic to logged-in users with `role === "user"`.
-
----
-
-## Deployment
-
-```bash
-# Netlify CLI
-netlify deploy --dir . --prod
-
-# Or drag the folder to https://app.netlify.com/drop
-```
-
-After deploying, add your live URL to:
-Supabase → Authentication → URL Configuration → Redirect URLs.
+Book data imported from Kaggle. Load via Supabase → Table Editor → Import CSV.
 
 ---
 
