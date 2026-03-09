@@ -6,6 +6,7 @@
 # Node modules (for Netlify Functions)
 node_modules/
 netlify/functions/node_modules/
+package-lock.json
 
 # OS files
 .DS_Store
