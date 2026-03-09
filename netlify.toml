@@ -8,9 +8,6 @@
 
 [functions]
   node_bundler = "esbuild"
-  
-  # Set timeout for functions (some data queries may take a moment)
-  timeout = 30
 
 # Redirect rules for client-side routing
 [[redirects]]
