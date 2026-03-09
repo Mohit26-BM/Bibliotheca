@@ -1,0 +1,9 @@
+{
+  "name": "bibliotheca",
+  "version": "1.0.0",
+  "description": "Library management system with Netlify serverless functions",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
