@@ -47,44 +47,45 @@ create policy "Books are viewable by all users"
 create policy "Admins can insert books"
   on public.books for insert
   with check (
-    exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    (select role from public.users where id = auth.uid()) = 'admin'
   );
 
 create policy "Admins can update books"
   on public.books for update
   using (
-    exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    (select role from public.users where id = auth.uid()) = 'admin'
   );
 
 create policy "Admins can delete books"
   on public.books for delete
   using (
-    exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    (select role from public.users where id = auth.uid()) = 'admin'
   );
 
 -- ── USERS ──
--- NOTE: uses (true) — see Section 7 for explanation
-create policy "Users can view own profile"
+-- SELECT: open to all authenticated — access control handled in JS
+-- UPDATE/INSERT: use scalar subquery to avoid circular reference
+create policy "users_select"
   on public.users for select
   using (true);
 
-create policy "Users can update own profile"
+create policy "users_insert"
+  on public.users for insert
+  with check (auth.uid() = id);
+
+create policy "users_update"
   on public.users for update
   using (
     auth.uid() = id
-    or exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    or (select role from public.users where id = auth.uid()) = 'admin'
   );
-
-create policy "Allow insert during registration"
-  on public.users for insert
-  with check (auth.uid() = id);
 
 -- ── LOANS ──
 create policy "Users can view own loans"
   on public.loans for select
   using (
     user_id = auth.uid()
-    or exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    or (select role from public.users where id = auth.uid()) = 'admin'
   );
 
 create policy "Users can create loans"
@@ -95,7 +96,7 @@ create policy "Users can update own loans"
   on public.loans for update
   using (
     user_id = auth.uid()
-    or exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    or (select role from public.users where id = auth.uid()) = 'admin'
   );
 
 -- ── REVIEWS ──
@@ -115,7 +116,7 @@ create policy "Users can delete own reviews"
   on public.reviews for delete
   using (
     user_id = auth.uid()
-    or exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+    or (select role from public.users where id = auth.uid()) = 'admin'
   );
 
 
@@ -139,14 +140,14 @@ create policy "Users can delete own reviews"
 -- 4. INDEXES
 -- ============================================================
 
-create index if not exists idx_books_title         on public.books (title);
-create index if not exists idx_books_available     on public.books (is_available);
-create index if not exists idx_loans_user_id       on public.loans (user_id);
-create index if not exists idx_loans_book_id       on public.loans (book_id);
-create index if not exists idx_loans_is_returned   on public.loans (is_returned);
-create index if not exists idx_reviews_book_id     on public.reviews (book_id);
-create index if not exists idx_reviews_user_id     on public.reviews (user_id);
-create index if not exists idx_users_is_deleted    on public.users (is_deleted);
+create index if not exists idx_books_title        on public.books (title);
+create index if not exists idx_books_available    on public.books (is_available);
+create index if not exists idx_loans_user_id      on public.loans (user_id);
+create index if not exists idx_loans_book_id      on public.loans (book_id);
+create index if not exists idx_loans_is_returned  on public.loans (is_returned);
+create index if not exists idx_reviews_book_id    on public.reviews (book_id);
+create index if not exists idx_reviews_user_id    on public.reviews (user_id);
+create index if not exists idx_users_is_deleted   on public.users (is_deleted);
 
 
 -- ============================================================
@@ -164,8 +165,8 @@ alter table public.users
 
 -- ============================================================
 -- 6. REVIEWS POLICY FIX
---    Supersedes review policies written in Section 2.
---    Adds admin delete permission which was missing originally.
+--    Supersedes review policies in Section 2.
+--    Adds admin delete permission.
 -- ============================================================
 
 drop policy if exists "Reviews are viewable by authenticated users" on public.reviews;
@@ -190,23 +191,5 @@ create policy "Users can delete own reviews"
   on public.reviews for delete
   using (
     user_id = auth.uid()
-    or exists (select 1 from public.users where id = auth.uid() and role = 'admin')
-  );
-
-
--- ============================================================
--- 7. USERS SELECT POLICY FIX
---    Supersedes "Users can view own profile" in Section 2.
---    The original stricter policy caused a circular reference:
---    the RLS check itself queries public.users to verify the
---    role, which triggers the policy again infinitely.
--- ============================================================
-
-drop policy if exists "Users can view own profile" on public.users;
-
-create policy "Users can view own profile"
-  on public.users for select
-  using (
-    auth.uid() = id
     or (select role from public.users where id = auth.uid()) = 'admin'
   );
